@@ -1,4 +1,4 @@
-<project name="lansiinformationcenter" basedir="." default="compile">
+<project name="ArcGISTest" basedir="." default="compile">
 
     <property environment="env"/>
 
@@ -75,7 +75,7 @@
 
     <target name="run" >
 
-        <java classname="lansi.lic.application.LansiInformationCenter" fork="yes">
+        <java classname="DisplaySceneSample" fork="yes">
             <classpath refid="project.classpath" />
         </java>
 
@@ -104,31 +104,6 @@
             <fileset dir="." includes="**/*.ico" />
             <!--<fileset dir="." includes="**/*.jspf" />-->
         </copy>
-
-    </target>
-
-
-<!--
-    <target name="inst" depends="dist">
-
-        <exec executable="c:\Tools\NSIS-2.39\makensis.exe">
-            <arg line="hl7viewer.nsi"/>
-        </exec>
-
-    </target>
--->
-
-
-    <!-- Standalone Targets -->
-
-    <target name="apidoc">
-
-        <delete dir="./apidoc" />
-        <mkdir dir="./apidoc" />
-
-        <javadoc destdir="./apidoc" sourcepath="${src}" packagenames="*" windowtitle="${ant.project.name}">
-            <classpath refid="project.classpath" />
-        </javadoc>
 
     </target>
 
