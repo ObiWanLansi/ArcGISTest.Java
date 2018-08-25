@@ -1,0 +1,135 @@
+<project name="lansiinformationcenter" basedir="." default="compile">
+
+    <property environment="env"/>
+
+    <property name="src" value="src" />
+    <property name="bin" value="bin" />
+    <property name="dist" value="dist" />
+
+    <!--<splash />-->
+
+    <path id="project.classpath">
+
+        <pathelement location="." />
+        <pathelement location="${bin}" />
+
+        <pathelement location="./lib/arcgis-java-api-javadoc.jar" />
+        <pathelement location="./lib/arcgis-java-api.jar" />
+        <pathelement location="./lib/commons-codec-1.9.jar" />
+        <pathelement location="./lib/commons-logging-1.2.jar" />
+        <pathelement location="./lib/gson-2.8.2.jar" />
+
+    </path>
+
+
+
+    <target name="clean">
+
+        <delete dir="./apidoc" />
+
+        <delete dir="${bin}" />
+
+        <!-- Eclipse braucht mindestens ein leeres bin Verzeichnis -->
+        <mkdir dir="${bin}" />
+
+        <!-- Wir wollen die komplette Verzeichnisse loeschen -->
+        <delete dir="dist" />
+
+    </target>
+
+
+
+    <target name="compile" depends="clean">
+
+        <mkdir dir="${bin}" />
+
+        <javac destdir="${bin}" srcdir="${src}" includes="**/*.java">
+            <classpath refid="project.classpath" />
+        </javac>
+
+    </target>
+
+
+
+    <target name="copyfiles">
+    
+        <copy todir="${bin}">
+            <fileset dir="${src}" includes="**/*.jpg" />
+            <fileset dir="${src}" includes="**/*.gif" />
+            <fileset dir="${src}" includes="**/*.png" />
+            <fileset dir="${src}" includes="**/*.xml" />
+            <fileset dir="${src}" includes="**/*.xsl" />
+            <fileset dir="${src}" includes="**/*.xquery" />
+            <fileset dir="${src}" includes="**/*.xpath" />
+            <fileset dir="${src}" includes="**/*.sql" />
+        </copy>
+        
+    </target>
+
+
+
+    <!--<target name="build" depends="compile,rmic,copyfiles" />-->
+    <target name="build" depends="compile,copyfiles" />
+
+
+
+    <target name="run" >
+
+        <java classname="lansi.lic.application.LansiInformationCenter" fork="yes">
+            <classpath refid="project.classpath" />
+        </java>
+
+    </target>
+
+
+
+    <target name="dist" depends="build">
+
+        <mkdir dir="${dist}" />
+        <mkdir dir="${dist}/lib" />
+
+
+        <copy todir="${dist}/lib" >
+            <fileset dir="./lib"/>
+        </copy>
+
+
+<!--        <jar destfile="${dist}/lib/${ant.project.name}.jar" basedir="${bin}" excludes="lib/**" />-->
+        <jar destfile="${dist}/lib/${ant.project.name}.jar" basedir="${bin}" excludes="lib/**" manifest="manifest.mf" />
+
+        <copy todir="${dist}">
+            <!--<fileset dir="." includes="**/*.exe" />-->
+            <fileset dir="." includes="**/*.bat" />
+            <fileset dir="." includes="**/*.sh" />
+            <fileset dir="." includes="**/*.ico" />
+            <!--<fileset dir="." includes="**/*.jspf" />-->
+        </copy>
+
+    </target>
+
+
+<!--
+    <target name="inst" depends="dist">
+
+        <exec executable="c:\Tools\NSIS-2.39\makensis.exe">
+            <arg line="hl7viewer.nsi"/>
+        </exec>
+
+    </target>
+-->
+
+
+    <!-- Standalone Targets -->
+
+    <target name="apidoc">
+
+        <delete dir="./apidoc" />
+        <mkdir dir="./apidoc" />
+
+        <javadoc destdir="./apidoc" sourcepath="${src}" packagenames="*" windowtitle="${ant.project.name}">
+            <classpath refid="project.classpath" />
+        </javadoc>
+
+    </target>
+
+</project>
