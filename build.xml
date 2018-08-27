@@ -73,7 +73,7 @@
 
 
 
-    <target name="run" >
+    <target name="run" depends="build">
 
         <java classname="DisplaySceneSample" fork="yes">
             <classpath refid="project.classpath" />
